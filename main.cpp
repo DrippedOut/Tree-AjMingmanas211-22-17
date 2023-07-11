@@ -8,5 +8,5 @@ int main(int argc, char **argv) {
   for (i = 1; i < argc; ++i) {
        b.insert_node (atoi(argv[i]));
   } // end for
-   b.print_all();
+   b.print_all(3);
 } // end main

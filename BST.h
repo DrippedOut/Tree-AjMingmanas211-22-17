@@ -22,14 +22,13 @@ void BST::insert_node(int value) {
   new_node = new TreeNode(value);
   if (new_node) {
     /*First Node*/
-    if (!rootPtr && size == 0) {
+    if (!rootPtr) {
       rootPtr = new_node;
     } else {
       t = rootPtr;
       while (!inserted) {
         // go left
         if (t->get_value() >= value) {
-          t->move_left();
           if (t->move_left()) {
             t = t->move_left();
           } else {
@@ -37,17 +36,23 @@ void BST::insert_node(int value) {
             inserted = 1;
           }
         }
-        // go right
-        if (t->move_right()) {
-          t = t->move_right();
-        } else {
-          t->set_right(new_node);
-          inserted = 1;
+
+        else
+        {
+          // go right
+          if (t->move_right()) 
+          {
+            t = t->move_right();
+          } else
+          {
+            t->set_right(new_node);
+            inserted = 1;
+          }
         }
       }
-      ++size;
     }
-  }
+    ++size;
+    }
 }
 
 BST::BST() {
@@ -61,38 +66,61 @@ BST::~BST() {
 }
 
 void BST::inOrder(TreeNodePtr treePtr) {
-  // TreeNodePtr treePtr=rootPtr;
   if (treePtr) {
+    /* Inorder: LEFT -> VISIT -> RIGHT  */
     // if tree is not empty, then traverse
-    inOrder(treePtr->move_left());           // Recursion to the left
-    cout << setw(3) << treePtr->get_value(); // print the value
-    inOrder(treePtr->move_right());          // Recursion to the right
-  }                                          // end if
+    inOrder(treePtr->move_left()); // Recursion to the left
+
+    cout << setw(3) << treePtr->get_value(); // print the value (VISIT)
+
+    inOrder(treePtr->move_right()); // Recursion to the right
+  }                                 // end if
 } // end function
+
 void BST::printTree(TreeNodePtr treePtr, int l) {
   // TreeNodePtr treePtr=rootPtr;
   if (treePtr) {
-
-  } // end if
-} // end function
+    // inverse of inorder {right->action->left}
+    printTree(treePtr->move_right(), l + 1);
+    cout << setw(l * 6) << treePtr->get_value() << endl;
+    printTree(treePtr->move_left(), l + 1);
+  }
+}
 
 void BST::postOrder(TreeNodePtr treePtr) {
   // TreeNodePtr treePtr=rootPtr;
+  /* Postorder: LEFT -> RIGHT -> VISIT */
   if (treePtr) {
-    // if tree is not empty, then traverse
+    postOrder(treePtr->move_left()); // Recursion to the left
 
-  } // end if
+    postOrder(treePtr->move_right()); // Recursion to the right
+
+    cout << setw(3) << treePtr->get_value(); // print the value (VISIT)
+  }                                          // end if
 } // end function
 
 void BST::kill(TreeNodePtr treePtr) {
   // TreeNodePtr treePtr=rootPtr;
+
+  if (treePtr) {
+    kill(treePtr->move_left());
+    kill(treePtr->move_right());
+    delete treePtr;
+  }
   // end if
 } // end function
+
 void BST::preOrder(TreeNodePtr treePtr) {
+  /* Preorder: VISIT -> LEFT -> RIGHT   */
   if (treePtr) {
     // TreeNodePtr treePtr=rootPtr;
 
-  } // end if
+    cout << setw(3) << treePtr->get_value(); // print the value (VISIT)
+
+    preOrder(treePtr->move_left()); // Recursion to the left
+
+    preOrder(treePtr->move_right()); // Recursion to the right
+  }                                  // end if
 } // end function
 
 void BST::print_all(int option) {
